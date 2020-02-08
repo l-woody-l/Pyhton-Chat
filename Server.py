@@ -14,24 +14,32 @@ print("[-] Socket Bound to port " + str(PORT))
 s.listen(10)
 print("Listening...")
 
-# The code below is what you're looking for ############
-
-def client_thread(conn):
-    conn.send(bytes("Welcome to the Server. Type messages and press enter to send.\n",'ascii'))
+def Listen_thread(conn):
+    conn.send(bytes("Welcome to the Server. Type messages and press enter to send.\n",'utf-8'))
 
     while True:
-        data = conn.recv(1024)
-        if not data:
-            break
         reply = bytes("OK . . ",'ascii') + data
         conn.sendall(reply)
     conn.close()
 
+def Send_thread(conn):
+
+    while True:
+        data = conn.recv(1024)
+        reply = bytes("OK . . ",'ascii') + data
+        conn.send(reply)
+    conn.close()
+
 while True:
-    # blocking call, waits to accept a connection
     conn, addr = s.accept()
     print("[-] Connected to " + addr[0] + ":" + str(addr[1]))
+    data = str(conn.recv(1024), "utf-8")
 
-    start_new_thread(client_thread, (conn,))
+    if data == "1":
+        print("[-] Connected to ListeningClient")
+        start_new_thread(Listen_thread, (conn,))
+    if data == "0":
+        print("[-] Connected to SendingClient")
+        start_new_thread(Send_thread, (conn,))
 
 s.close()
