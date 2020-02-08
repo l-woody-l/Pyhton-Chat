@@ -14,7 +14,6 @@ TURQUOISE = (0, 206, 209)
 
 textfont = pygame.font.SysFont('courier new', 36)
 
-
 def keypress(done):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

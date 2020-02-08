@@ -1,8 +1,8 @@
 import socket
 
-s = socket.socket()
+s = socket.socket() #192.168.1.160
 host = 'localhost'
-port = 3149
+port = 3419
 
 s.connect((host, port))
 

@@ -1,21 +1,37 @@
 import socket
+import sys
+from _thread import start_new_thread
 
-s = socket.socket()
-host = 'localhost'
-port = 3149
+HOST = '' #all availabe interfaces
+PORT = 3419 #arbitrary non privileged port
 
-s.bind((host, port))
-s.listen(5)
-print("Listening")
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+print("[-] Socket Created")
 
-def connection():
-    names = ""
-    c, addr = s.accept()
-    print('got connection from', addr)
-    names += str(c.recv(1024), "utf-8")
-    c.send(bytes("Connection Established. Recent Names: " + names, "utf-8"))
-    print('Connection ended with', addr)
-    c.close()
+# bind socket
+s.bind((HOST, PORT))
+print("[-] Socket Bound to port " + str(PORT))
+s.listen(10)
+print("Listening...")
+
+# The code below is what you're looking for ############
+
+def client_thread(conn):
+    conn.send(bytes("Welcome to the Server. Type messages and press enter to send.\n",'ascii'))
+
+    while True:
+        data = conn.recv(1024)
+        if not data:
+            break
+        reply = bytes("OK . . ",'ascii') + data
+        conn.sendall(reply)
+    conn.close()
 
 while True:
-    connection()
+    # blocking call, waits to accept a connection
+    conn, addr = s.accept()
+    print("[-] Connected to " + addr[0] + ":" + str(addr[1]))
+
+    start_new_thread(client_thread, (conn,))
+
+s.close()
