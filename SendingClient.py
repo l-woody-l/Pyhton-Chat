@@ -6,7 +6,7 @@ port = 3419
 
 s.connect((host, port))
 
-while True:
-    print(str(s.recv(1024), "utf-8"))
+name = input("What's your name? ")
+s.send(bytes(name, 'utf-8'))
 
 s.close()
