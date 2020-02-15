@@ -3,14 +3,13 @@ import socket
 s = socket.socket()
 host = 'localhost'
 port = 3419
-name = ""
+message = ""
 
 s.connect((host, port))
+s.send(bytes("sender", 'utf-8'))
 
-s.send(bytes("0", 'utf-8'))
-
-while name != "q":
-    name = input("Enter something: ")
-    s.send(bytes(name, 'utf-8'))
+while message != "q":
+    message = input("Enter something: ")
+    s.send(bytes(message, 'utf-8'))
 
 s.close()
