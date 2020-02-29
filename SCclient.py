@@ -65,7 +65,6 @@ top.protocol("WM_DELETE_WINDOW", on_closing)
     #PORT = int(PORT)
 HOST = "192.168.1.207"
 PORT = 33000
-PlaySound("lego.wav", SND_NOSTOP|SND_ASYNC)
 BUFSIZ = 1024
 ADDR = (HOST, PORT)
 
