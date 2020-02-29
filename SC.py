@@ -47,7 +47,11 @@ def broadcast(msg, prefix=""):  # prefix is for name identification.
     """Broadcasts a message to all the clients."""
 
     for sock in clients:
-        sock.send(bytes(prefix, "utf8") + msg)
+        try:
+            sock.send(bytes(prefix, "utf8") + msg)
+        except OSError:
+            del sock
+            break
 
 
 clients = {}

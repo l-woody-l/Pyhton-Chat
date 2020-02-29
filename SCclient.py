@@ -3,7 +3,8 @@
 from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
 import tkinter
-
+from winsound import *
+import time
 
 def receive():
     """Handles receiving of messages."""
@@ -11,6 +12,7 @@ def receive():
         try:
             msg = client_socket.recv(BUFSIZ).decode("utf8")
             msg_list.insert(tkinter.END, msg)
+            msg_list.see("end")
         except OSError:  # Possibly client has left the chat.
             break
 
@@ -34,13 +36,12 @@ def on_closing(event=None):
     send()
 
 top = tkinter.Tk()
-top.title("Chatter")
+top.title("Python Chat")
 
 messages_frame = tkinter.Frame(top)
-my_msg = tkinter.StringVar()  # For the messages to be sent.
+my_msg = tkinter.StringVar()
 my_msg.set("")
-scrollbar = tkinter.Scrollbar(messages_frame)  # To navigate through past messages.
-# Following will contain the messages.
+scrollbar = tkinter.Scrollbar(messages_frame)
 msg_list = tkinter.Listbox(messages_frame, height=20, width=300, yscrollcommand=scrollbar.set)
 scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y)
 msg_list.pack(side=tkinter.LEFT, fill=tkinter.BOTH)
@@ -56,13 +57,15 @@ send_button.pack()
 top.protocol("WM_DELETE_WINDOW", on_closing)
 
 #----Now comes the sockets part----
-HOST = input('Enter host: ')
-PORT = input('Enter port: ')
-if not PORT:
-    PORT = 33000
-else:
-    PORT = int(PORT)
-
+#HOST = input('Enter host(192.168.1.207): ')
+#PORT = input('Enter port(33000): ')
+#if not PORT:
+    #PORT = 33000
+#else:
+    #PORT = int(PORT)
+HOST = "192.168.1.207"
+PORT = 33000
+PlaySound("lego.wav", SND_NOSTOP|SND_ASYNC)
 BUFSIZ = 1024
 ADDR = (HOST, PORT)
 
